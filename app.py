@@ -47,7 +47,6 @@ def register():
 @app.route('/write')
 def write():
     token_receive = request.cookies.get('mytoken')
-    print(token_receive)
 
     if token_receive is not None:
         return render_template('write.html')
@@ -97,8 +96,30 @@ def api_login():
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
+# 리스트 작성 창에서 리스트 양식 값들 받아오기
+@app.route('/api/write', methods=['POST', 'GET'])
+def api_write():
+    token_receive = request.cookies.get('mytoken')  # 토큰 받아서 디코드
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
 
+    # db schedule에 들어갈 정보들 dictionary 작성
+    id_receive = payload['id']
+    title_receive = request.form['title_give']
+    content_receive = request.form['content_give']
+    time1_receive = request.form['time1_give']  #time1 -> hour
+    time2_receive = request.form['time2_give']  #time2 -> minute
+    day_receive = request.form.getlist('day_give[]')
 
+    doc = {
+        "id": id_receive,
+        "subject": title_receive,
+        "time": time1_receive + ':' + time2_receive,  # 시간
+        "day": day_receive,
+        "content": content_receive
+    }
+    # db에 저장하기
+    db.schedule.insert_one(doc)
+    return jsonify({'result': 'success', 'msg': '작성되었습니다.'})
 
 '''
 # API 역할을 하는 부분
