@@ -10,6 +10,7 @@ app = Flask(__name__)
 client = MongoClient('localhost', 27017)
 db = client.crud
 
+
 SECRET_KEY = 'SPARTA'
 @app.route('/')
 def home():
