@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&family=Sunflower:wght@500&display=swap"
+          rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <style>
+        * {
+            font-family: 'Nanum Myeongjo', serif;
+            font-family: 'Sunflower', sans-serif;
+        }
+
+        .logo {
+            /*background-color: #6daa6d;*/
+            margin: 40px auto;
+            width: 500px;
+            height: 100px;
+            background-image: url('../static/logo.png');
+            background-position: center;
+            background-size: 800px;
+        }
+
+        .center {
+            margin: 100px auto auto auto;
+            width: 480px;
+            height: 100%;
+            background-color: white;
+            border: 1px solid white;
+            box-shadow: 2px 2px 2px 2px rgba(148, 146, 146, 0.99);
+            border-radius: 5px;
+
+        }
+
+        /*회원가입 버튼 css*/
+        .login_button {
+            background-color: #6daa6d;
+            font-size: 17px;
+            padding: 7px 13px;
+            margin-top: 13px;
+            margin-bottom: 15px;
+            margin-left: 15%;
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .btn_pos {
+            width: 151px;
+            margin: auto;
+            height: auto;
+            position: center;
+        }
+
+        /*로그인, 회원가입 버튼 css*/
+        .id_margin {
+            margin: 20px 15px auto 15px;
+        }
+
+        .checkbox {
+            width: 19%;
+            height: 43px;
+            border-radius: 5px;
+            background-color: red;
+            border: 1px solid white;
+            color: white;
+        }
+
+        .help1 {
+            width: 90%;
+            height: 43px;
+            margin: 10px auto -30px;
+            font-size: 13px;
+        }
+
+        .help2 {
+            width: 90%;
+            height: 43px;
+            margin: 10px auto -30px;
+            font-size: 13px;
+        }
+
+        /*아이디아이콘 css 시작*/
+        input[type="idicon"] {
+
+            width: 80%;
+            border: 2px solid #aaa;
+            border-radius: 4px;
+            outline: none;
+            padding: 8px;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        /*아이디아이콘 css 시작*/
+        input[type="idicon"]:focus {
+            border-color: dodgerBlue;
+            box-shadow: 0 0 8px 0 dodgerBlue;
+        }
+
+        .inputWithIcon input[type="idicon"] {
+            padding-left: 50px;
+        }
+
+        .inputWithIcon {
+            position: relative;
+        }
+
+        .inputWithIcon i {
+            position: absolute;
+            left: 0;
+            top: 8px;
+            padding: 9px 8px;
+            color: #aaa;
+            transition: 0.3s;
+        }
+
+        .icon2 {
+            background-color: red;
+            margin: 1px 10px 10px 5px;
+            width: 30px;
+            height: 30px;
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8Y3ey--UksSKtlNj4MDyV119hwgyCzBiVeuAWjX7gFo6Tui0OHIlEJR0_2iRBATClQbA&usqp=CAU');
+            background-position: center;
+            background-size: 30px;
+        }
+
+        /*아이디아이콘 css 끝*/
+
+        /*비밀번호아이콘 css 시작*/
+        input[type="password"] {
+            width: 100%;
+            border: 2px solid #aaa;
+            border-radius: 4px;
+            outline: none;
+            padding: 8px;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        input[type="password"]:focus {
+            border-color: dodgerBlue;
+            box-shadow: 0 0 8px 0 dodgerBlue;
+        }
+
+        .inputWithIcon input[type="password"] {
+            padding-left: 50px;
+        }
+
+        .inputWithIcon {
+            position: relative;
+        }
+
+        .inputWithIcon i {
+            position: absolute;
+            left: 0;
+            top: 8px;
+            padding: 9px 8px;
+            color: #aaa;
+            transition: 0.3s;
+        }
+
+        .icon {
+            background-color: red;
+            margin: 1px 10px 10px 2px;
+            width: 35px;
+            height: 27px;
+            background-image: url('data:image/png;base64,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');
+            background-position: center;
+            background-size: 28px;
+
+        }
+
+        .helpid{
+            font-size: 17px;
+            width: 210px;
+            margin: 18px auto auto auto;
+        }
+        .helppw{
+            width: 90%;
+            height: 43px;
+            margin: 10px auto -30px;
+            font-size: 13px;
+        }
+
+        /*비밀번호아이콘 css 끝*/
+
+    </style>
+    <script>
+        /*회원가입 눌렀을 때*/
+        function singbtn() {
+            let idtxt = $("#idtxt").val()
+            let pwdtxt = $("#pwdtxt").val()
+            let pwdcheck = $("#pwdcheck").val()
+
+
+            if (idtxt == "") {
+                $("#help-id-login").text("")
+                $("#idtxt").focus()
+                alert("이메일을 입력해주세요.")
+                return
+            }
+            else {
+                $("#help-id-login").text("")
+            }
+
+            if (pwdtxt == "") {
+                $("#help-password-login").text("")
+                $("#pwdtxt").focus()
+                alert("비밀번호를 입력해주세요.")
+                return
+            }
+            else if (!is_password(pwdtxt)) {
+                $("#help-password1").text("비밀번호의 형식을 확인해주세요. 영문과 숫자 필수 포함, 특수문자(!@#$%^&*) 사용가능 8-20자")
+                $("#help-password2").text("")
+                $("#pwdtxt").focus()
+                return
+            } else {
+                $("#help-password1").text("사용할 수 있는 비밀번호입니다.")
+                $("#help-password2").text("")
+            }
+            if (pwdcheck == "") {
+                $("#help-password3").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#userpw2").focus()
+                return;
+            } else if (pwdtxt != pwdcheck) {
+                $("#help-password3").text("비밀번호가 일치하지 않습니다.").removeClass("is-safe").addClass("is-danger")
+                $("#userpw2").focus()
+                return;
+            } else {
+                $("#help-password3").text("비밀번호가 일치합니다.").removeClass("is-danger").addClass("is-success")
+            }
+
+
+            $.ajax({
+                type: 'POST',
+                url: '/register/move',
+                data: {id: idtxt, pwdtxt: pwdtxt},
+                success: function (response) {
+                    alert("회원 가입을 축하드립니다!")
+                    window.location.href = "/login"
+                }
+            });
+        }
+
+        function checkbtn() {
+            let useremail = $("#idtxt").val()
+
+            if (useremail == "") {
+                $("#help-id").text("이메일을 입력해주세요.")
+                $("#idtxt").focus()
+                $('#id_check_success').hide();
+                return;
+            }
+            if (!is_id(useremail)) {
+                $("#help-id").text("이메일 형식을 확인해주세요.")
+                $("#idtxt").focus()
+                return;
+            }
+
+            $("#help-id").addClass("is-loading")
+
+            $.ajax({
+                type: "POST",
+                url: "/sign_up/check_dup",
+                data: {
+                    id_give: useremail
+                },
+                success: function (response) {
+                    if (response["exists"]) {
+                        $("#help-id").text("이미 존재하는 이메일입니다.")
+                    } else {
+                        $("#help-id").text("사용가능한 이메일입니다.")
+                        $('#idtxt').attr("check_result", "success");
+                    }
+                }
+            });
+        }
+
+        /*아이디 형식 확인*/
+        function is_id(asValue) {
+            var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+            return regExp.test(asValue);
+        }
+        /*비번 형식 확인*/
+        function is_password(asValue) {
+            var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
+            return regExp.test(asValue);
+        }
+    </script>
+</head>
+
+<body>
+<div class="logo"></div>
+
+<form class="center">
+    <div class="id_margin">
+        <div><label><b>ID</b></label></div>
+        <div class="inputWithIcon">
+            <input type="idicon" id="idtxt" placeholder="e.g abcde~@example.com">
+            <i class="icon2" aria-hidden="true"></i>
+            <button class="checkbox" type="button" class="id_overlap_button" onclick="checkbtn()">중복확인</button>
+            <img id="id_check_sucess" style="display: none; ">
+        </div>
+    </div>
+
+    <p class="helpid" id="help-id" style="color: red"></p>
+
+    <div class="id_margin">
+        <label><b>Password</b></label>
+        <div class="inputWithIcon">
+            <input type="password" id="pwdtxt" placeholder="*******">
+            <i class="icon" aria-hidden="true"></i>
+        </div>
+    </div>
+
+    <p id="help-password1" class="help1">영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요.</p>
+    <p id="help-password2" class="help2">특수문자(!@#$%^&*)도 사용 가능합니다.</p>
+
+    <div class="id_margin">
+        <div class="inputWithIcon">
+            <input type="password" id="pwdcheck" placeholder="비밀번호 재입력">
+            <i class="icon" aria-hidden="true"></i>
+        </div>
+
+    </div>
+    <p  id="help-password3" class="helppw"></p>
+    <div class="btn_pos">
+        <button  type="button" onclick="singbtn()" class="login_button">회원가입</button>
+    </div>
+
+</form>
+
+
+</body>
+</html>

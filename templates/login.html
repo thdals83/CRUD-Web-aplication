@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&family=Sunflower:wght@500&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <style>
+        * {
+            font-family: 'Nanum Myeongjo', serif;
+            font-family: 'Sunflower', sans-serif;
+        }
+
+        .center {
+            margin: 100px auto auto auto;
+            width: 480px;
+            height: 240px;
+            background-color: white;
+            border: 1px solid white;
+            box-shadow: 2px 2px 2px 2px rgba(148, 146, 146, 0.99);
+            border-radius: 5px;
+
+        }
+        /*로그인, 회원가입 버튼 css*/
+        .login_button{
+            background-color: #6daa6d;
+            font-size:15px;
+            padding:7px 13px;
+            margin-top: 10px;
+            border:none;
+            border-radius: 5px;
+            color: white;
+        }
+        .btn_pos{
+            width: 151px;
+            margin: auto;
+            height: auto;
+            position: center;
+        }
+        /*로그인, 회원가입 버튼 css*/
+        .id_margin{
+            margin: 20px 15px auto 15px;
+        }
+        .logo{
+            /*background-color: #6daa6d;*/
+            margin: 40px auto;
+            width: 500px;
+            height: 100px;
+            background-image: url('../static/logo.png');
+            background-position: center;
+            background-size: 800px;
+        }
+    </style>
+    <script>
+        function register() {
+            window.location.href = "/register"
+        }
+
+        function loginbtn() {
+            let useremail = $("#userid").val()
+            let password = $("#userpw").val()
+
+            if (useremail == "") {
+                $("#help-id-login").text("")
+                $("#userid").focus()
+                alert("이메일을 입력해주세요.")
+                return;
+            } else {
+                $("#help-id-login").text("")
+            }
+
+            if (password == "") {
+                $("#help-password-login").text("")
+                $("#userpw").focus()
+                alert("비밀번호를 입력해주세요.")
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/api/login",
+                data: {
+                    id_give: useremail,
+                    pw_give: password
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        console.log("11")
+                        $.cookie('mytoken', response['token'], {path: '/'});
+                        console.log("2")
+                        window.location.href = '/'
+                    } else {
+                        alert(response['msg'])
+                    }
+                }
+            });
+        }
+
+    </script>
+</head>
+
+<body>
+    <div class="logo"></div>
+
+<form class="center">
+    <div class="id_margin">
+        <label ><b>ID</b></label>
+        <input type="email"  class="form-control" id = "userid"
+               aria-describedby="emailHelp" placeholder="e.g abcde~@example.com">
+    </div>
+    <div class="id_margin">
+        <label><b>Password</b></label>
+        <input type="password" class="form-control" id = "userpw" placeholder="*******">
+    </div>
+    <div class="btn_pos">
+        <button  type="button" onclick="loginbtn()" class="login_button">로그인</button>
+        <button  type="button" onclick="register()"  class="login_button">회원가입</button>
+    </div>
+
+</form>
+</body>
+</html>
