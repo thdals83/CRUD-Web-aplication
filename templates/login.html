@@ -92,7 +92,6 @@
                 alert("비밀번호를 입력해주세요.")
                 return;
             }
-
             $.ajax({
                 type: "POST",
                 url: "/api/login",
@@ -102,9 +101,7 @@
                 },
                 success: function (response) {
                     if (response['result'] == 'success') {
-                        console.log("11")
                         $.cookie('mytoken', response['token'], {path: '/'});
-                        console.log("2")
                         window.location.href = '/'
                     } else {
                         alert(response['msg'])
