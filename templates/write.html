@@ -56,18 +56,54 @@
             box-shadow: 2px 2px 2px 2px rgba(148, 146, 146, 0.99);
             border-radius: 5px;
         }
-        .checkboxcss{
+
+        .content{
+            margin: 100px auto auto auto;
+            width: 800px;
+            height: 450px;
+
+            background-color: white;
+            border: 1px solid white;
+            box-shadow: 2px 2px 2px 2px rgba(148, 146, 146, 0.99);
+            border-radius: 5px;
+            padding: 15px;
+            padding-top: 5px;
+        }
+
+        .checkboxcss {
             width: 300px;
             margin: auto;
         }
-        .timecss{
-            width: 150px;
+        .timecss {
+            width: 200px;
             margin: auto;
-            solid-color: blue;
-            font-family: inherit; /* 폰트 상속 */
-            font-size: 20px;
-            padding: .8em .5em; /* 여백으로 높이 설정 */
+            font-size: 15px;
+            padding: 20px; /* 여백으로 높이 설정 */
 
+        }
+        .timecss2 {
+            width: 60px;
+            height: 35px;
+            margin: auto 10px auto auto;
+            font-size: 15px;
+            padding: 5px; /* 여백으로 높이 설정 */
+            border-color: #aaaaaa;
+
+        }
+        .label{
+            margin-top: 10px;
+            margin-bottom: -20px;
+            font-size: 18px;
+        }
+        .titlecss{
+            margin-top: -30px;
+            width: 760px;
+            height: 40px;
+        }
+        .contentecss{
+            margin-top: -10px;
+            width: 760px;
+            height: 300px;
         }
 
     </style>
@@ -171,7 +207,7 @@
             <option value="22">22</option>
             <option value="23">23</option>
         </select>
-        <select id="schedule-time2">
+        <select class="timecss2" id="schedule-time2">
             <option value="00">00</option>
             <option value="01">01</option>
             <option value="02">02</option>
@@ -239,13 +275,12 @@
 
 <div class="content">
     <div class="box">
-        <label class="label">제목</label>
-        <input id="schedule-title" class="input is-normal" type="text" value=""
-               placeholder="제목을 입력하세요">
+        <p><label class="label"><b>제목</b></label></p>
+        <input id="titleid" class="titlecss" type="text" value="" placeholder="제목을 입력하세요">
     </div>
     <div>
-        <label class="label">내용</label>
-        <textarea id="schedule-content" class="textarea" placeholder="내용을 입력하세요"
+         <p><label class="label"><b>내용</b></label></p>
+        <textarea id="schedule-content" class="contentecss" placeholder="내용을 입력하세요"
                   rows="10"></textarea>
     </div>
 </div>
