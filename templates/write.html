@@ -48,18 +48,16 @@
         }
 
         .center {
-            margin: 100px auto auto auto;
+            margin: 70px auto -20px auto;
             width: 480px;
             height: 200px;
             background-color: white;
-            border: 1px solid white;
-            box-shadow: 2px 2px 2px 2px rgba(148, 146, 146, 0.99);
-            border-radius: 5px;
+
         }
 
-        .content{
-            margin: 100px auto auto auto;
-            width: 800px;
+        .content {
+            margin: 0px auto auto auto;
+            width: 850px;
             height: 450px;
 
             background-color: white;
@@ -74,6 +72,7 @@
             width: 300px;
             margin: auto;
         }
+
         .timecss {
             width: 200px;
             margin: auto;
@@ -81,6 +80,7 @@
             padding: 20px; /* 여백으로 높이 설정 */
 
         }
+
         .timecss2 {
             width: 60px;
             height: 35px;
@@ -90,20 +90,64 @@
             border-color: #aaaaaa;
 
         }
-        .label{
+
+        .label {
             margin-top: 10px;
             margin-bottom: -20px;
             font-size: 18px;
         }
-        .titlecss{
+
+        .titlecss {
             margin-top: -30px;
-            width: 760px;
+            width: 820px;
             height: 40px;
+            border-radius: 5px;
+            border-color: rgba(128, 128, 128, 0.99);
         }
-        .contentecss{
+
+        input[type="text"]:focus {
+            border-color: dodgerBlue;
+            box-shadow: 0 0 8px 0 dodgerBlue;
+        }
+
+        .contentecss {
             margin-top: -10px;
-            width: 760px;
+            width: 820px;
             height: 300px;
+            border-radius: 5px;
+            border-width: 2px;
+            border-color: rgba(128, 128, 128, 0.99);
+        }
+
+        textarea[type="text"]:focus {
+            border-color: dodgerBlue;
+            box-shadow: 0 0 8px 0 dodgerBlue;
+        }
+
+        .btn {
+            margin: 15px auto auto 660px;
+        }
+
+        .button1 {
+            width: 414px;
+            height: 40px;
+            /*margin: auto;*/
+            margin-right: 20px;
+            border-color: red;
+            background-color: red;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .button2 {
+            width: 414px;
+            height: 40px;
+            /*margin: auto;*/
+            margin-right: 20px;
+            border-color: #6daa6d;
+            background-color: #6daa6d;
+            border-radius: 5px;
+            color: white;
         }
 
     </style>
@@ -276,17 +320,18 @@
 <div class="content">
     <div class="box">
         <p><label class="label"><b>제목</b></label></p>
-        <input id="titleid" class="titlecss" type="text" value="" placeholder="제목을 입력하세요">
+        <input id="schedule-title" class="titlecss" type="text" value="" placeholder="제목을 입력하세요">
     </div>
     <div>
-         <p><label class="label"><b>내용</b></label></p>
-        <textarea id="schedule-content" class="contentecss" placeholder="내용을 입력하세요"
+        <p><label class="label"><b>내용</b></label></p>
+        <textarea id="schedule-content" type="text" class="contentecss" placeholder="내용을 입력하세요"
                   rows="10"></textarea>
     </div>
 </div>
+
 <div class="btn">
-    <button class="button is-danger button1" onclick="location.href='/' ">뒤로가기</button>
-    <button class="button is-primary button2" onclick="schedule()">등록하기</button>
+    <button class="button1" onclick="location.href='/' ">뒤로가기</button>
+    <button class="button2" onclick="schedule()">등록하기</button>
 </div>
 </body>
 </html>

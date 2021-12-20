@@ -83,7 +83,7 @@ def api_login():
         payload = {
             'id': id_receive,
             #'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지 => hour 또는 day
-            'exp': datetime.utcnow() + timedelta(seconds=60 * 5)  # 로그인 5분 유지 => hour 또는 day
+            'exp': datetime.utcnow() + timedelta(seconds=60 * 20)  # 로그인 5분 유지 => hour 또는 day
         }
 
         # .decode('utf-8')붙이면 서버에서 작동가능, 떼면 로컬에서 작동
@@ -121,31 +121,6 @@ def api_write():
     db.schedule.insert_one(doc)
     return jsonify({'result': 'success', 'msg': '작성되었습니다.'})
 
-'''
-# API 역할을 하는 부분
-@app.route('/api/list', methods=['GET'])
-def show_stars():
-    movie_stars = list(db.mystar.find({},{"_id":False}).sort('like', -1))
-    return jsonify({'movie_stars': movie_stars})
-
-
-@app.route('/api/like', methods=['POST'])
-def like_star():
-    name_receive = request.form['name_give']
-    target_star = db.mystar.find_one({"name":name_receive})
-    current_like = target_star["like"]
-
-    new_like = current_like + 1
-    db.mystar.update_one({"name":name_receive}, {"$set": {"like":new_like}})
-    return jsonify({'msg': '좋아요 완료'})
-
-
-@app.route('/api/delete', methods=['POST'])
-def delete_star():
-    name_receive = request.form['name_give']
-    db.mystar.delete_one({"name": name_receive})
-    return jsonify({'msg': '삭제 완료!'})
-'''
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
