@@ -68,18 +68,23 @@
                 success: function (response) {
                     // 서버단에서 넘어온 String을 JSON으로 파싱
                     const data = JSON.parse(response.result)
-                    let check = 0
-                    for (let i in data) {
-                        console.log(data[i])
-                    }
+                    var days = ['월 ', '화 ', '수 ', '목 ', '금 ', '토 ', '일 ', '매주']
+
 
                     for (let i in data) {
+                        let daystring = ''
+                        for (let j in data[i]["day"]){
+                            if (data[i]["day"][j] === "true"){
+                                daystring += days[j]
+                            }
+
+                        }
                         let temp_html = `
                         <div class="round-cb">
                             <input type="checkbox" >
                             <label ></label>
                         </div>
-                        <p>${data[i]["day"]}</p>
+                        <p>${daystring}</p>
                         <p>${data[i]["subject"]}</p>
                         <p>${data[i]["time"]}</p>
                         <p>${data[i]["content"]}</p>
@@ -87,7 +92,7 @@
                         `
                         // 데이터를 리스트 템플릿으로 변환
                         // const allListHtmls = getAllLists(data)
-
+                        console.log(data[i]["day"])
                         $("#listbox").append(temp_html)
                     }
                 }
