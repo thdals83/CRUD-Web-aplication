@@ -1,4 +1,8 @@
 import hashlib
+
+from bson.json_util import dumps
+from operator import itemgetter
+
 import jwt
 from bson import ObjectId
 from pymongo import MongoClient
@@ -10,6 +14,8 @@ client = MongoClient('localhost', 27017)
 db = client.crud
 
 SECRET_KEY = 'SPARTA'
+
+
 @app.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
@@ -25,11 +31,12 @@ def home():
             # 시간 정보 AM/PM 포맷팅 (hh:mm -> ex) AM 10:30)
             item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %I:%M')
 
-        return render_template('list.html', schd_data = schd_data, userId = member)
+        return render_template('list.html', schd_data=schd_data, userId=member)
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login"))
+
 
 # 로그인 화면
 @app.route('/login')
@@ -58,7 +65,7 @@ def moverlogin():
     pwd = request.form["pwdtxt"]
     pw_hash = hashlib.sha256(pwd.encode('utf-8')).hexdigest()
 
-    doc = {"id":id, "pwd":pw_hash}
+    doc = {"id": id, "pwd": pw_hash}
     db.user.insert_one(doc)
     return render_template('login.html')
 
@@ -80,7 +87,7 @@ def api_login():
     if result is not None:
         payload = {
             'id': id_receive,
-            #'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지 => hour 또는 day
+            # 'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지 => hour 또는 day
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60)  # 로그인 5분 유지 => hour 또는 day
         }
 
@@ -104,8 +111,8 @@ def api_write():
     id_receive = payload['id']
     title_receive = request.form['title_give']
     content_receive = request.form['content_give']
-    time1_receive = request.form['time1_give']  #time1 -> hour
-    time2_receive = request.form['time2_give']  #time2 -> minute
+    time1_receive = request.form['time1_give']  # time1 -> hour
+    time2_receive = request.form['time2_give']  # time2 -> minute
     day_receive = request.form.getlist('day_give[]')
 
     doc = {
@@ -118,6 +125,40 @@ def api_write():
     # db에 저장하기
     db.schedule.insert_one(doc)
     return jsonify({'result': 'success', 'msg': '작성되었습니다.'})
+
+
+# [리스트 정렬 API]
+@app.route('/api/sort', methods=['POST'])
+def api_sort():
+    # 2차 정렬 선택 값
+    # 상세: 입력순 -> normal, 시간 빠른순 -> fast, 매주 우선순 -> week
+    action_receive = request.form['action_give']
+    # 해당 유저의 전체 스케줄 데이터를 조회하기 위해 유저 ID값을 저장
+    id_receive = request.form['id_give']
+
+    # 유저 ID로 스케줄 전체 데이터를 조회
+    filter_data = list(db.schedule.find({'id': id_receive}))
+
+    # 전체보기 && 입력순
+    if action_receive == 'normal':
+        return jsonify({'result': dumps(filter_data)})
+
+    # 전체보기 && 시간빠른순
+    elif action_receive == 'fast':
+        arr = sorted(filter_data, key=itemgetter('time'))
+        return jsonify({'result': dumps(arr)})
+
+    # 전체보기 && 매주 우선순
+    elif action_receive == 'week':
+
+        sortedArr = []
+
+        for i in range(len(filter_data), 0, -1):
+            if (filter_data[i - 1]['day'][-1] == 'false'):
+                sortedArr.append(filter_data[i - 1])
+            else:
+                sortedArr.insert(0, filter_data[i - 1])
+        return jsonify({'result': dumps(sortedArr)})
 
 
 if __name__ == '__main__':
