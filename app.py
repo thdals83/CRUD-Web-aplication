@@ -18,8 +18,6 @@ def home():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         member = db.user.find_one({"id": payload['id']})['id']
 
-        schd_data = list(db.schedule.find({'id': member}))  #회원정보(member) db와 스케줄정보(schedule) db를 id 값으로 연동
-
         # 토큰정보(유저의 ID)를 통해 현재 접속자의 스케줄 데이터를 조회
         schd_data = list(db.schedule.find({'id': member}))
 
@@ -83,7 +81,7 @@ def api_login():
         payload = {
             'id': id_receive,
             #'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지 => hour 또는 day
-            'exp': datetime.utcnow() + timedelta(seconds=60 * 20)  # 로그인 5분 유지 => hour 또는 day
+            'exp': datetime.utcnow() + timedelta(seconds=60 * 60)  # 로그인 5분 유지 => hour 또는 day
         }
 
         # .decode('utf-8')붙이면 서버에서 작동가능, 떼면 로컬에서 작동
