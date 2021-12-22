@@ -152,6 +152,63 @@
 
     </style>
     <script>
+        function edit() {
+            //iput checkbox를 name으로 한번에 불러오기
+            var day = $('input[name="day"]');
+            //input을 반복처리 실행, 배열형태로 체크여부 추출
+            var days = $.map(day, function (inputCheck) {
+                    return inputCheck.checked
+                }
+            );
+
+            //요일 체크박스가 선택되지 않았을 경우 alert 띄워주기
+            //input의 name으로 불러온 값이 체크가 되어있는지 확인
+            var check = $('input[name="day"]:checked')
+
+            //체크된 값의 길이가 0이면(체크값이 없으면) 요일을 체크해주세요 alert띄우고 return
+            if (check.length == 0) {
+                alert("요일을 체크해주세요.")
+                return;
+            }
+            let params = new URLSearchParams(document.location.search.substring(1))
+            //params의 u_id값 가져오기
+            let u_id = params.get("u_id")
+
+            //저장시킬 항목들 value 저장
+            let time1 = $('#schedule-time1').val();
+            let time2 = $('#schedule-time2').val();
+            let title = $('#schedule-title').val();
+            let content = $('#schedule-content').val();
+
+            //사용자가 제목 작성하지 않았을 때 focus해주기
+            if (title == "") {
+                $("#schedule-title").focus()
+                return;
+            }
+            //사용자가 내용 작성하지 않았을 때 focus해주기
+            if (content == "") {
+                $("#schedule-content").focus()
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/api/edit",
+                data: {
+                    _id: u_id,
+                    time1_give: time1,
+                    time2_give: time2,
+                    title_give: title,
+                    content_give: content,
+                    day_give: days
+                },
+                success: function (response) {
+                    alert(response["msg"]);
+                    window.location.href = '/'
+                }
+            })
+        }
+
         //사용자가 작성한 내용 db에 보내주기
         function schedule() {
             //iput checkbox를 name으로 한번에 불러오기
@@ -210,6 +267,283 @@
 <body>
 <div class="logo"></div>
 
+{% if schedules %}
+<div class="center">
+    {# db schedule에 체크박스가 체크된 것으로 저장되어 있으면 체크표시 해주기#}
+    <form class="checkboxcss" method="get" action="">
+        <label><input type="checkbox" name="day"
+                      value="monday" {{ "checked" if schedules.day[0] == "true" else "" }}> 월</label>
+        <label><input type="checkbox" name="day"
+                      value="tuesday" {{ "checked" if schedules.day[1] == "true" else "" }}> 화</label>
+        <label><input type="checkbox" name="day"
+                      value="wednesday" {{ "checked" if schedules.day[2] == "true" else "" }}> 수</label>
+        <label><input type="checkbox" name="day"
+                      value="thursday" {{ "checked" if schedules.day[3] == "true" else "" }}> 목</label>
+        <label><input type="checkbox" name="day"
+                      value="friday" {{ "checked" if schedules.day[4] == "true" else "" }}> 금</label>
+        <label><input type="checkbox" name="day"
+                      value="saturday" {{ "checked" if schedules.day[5] == "true" else "" }}> 토</label>
+        <label><input type="checkbox" name="day"
+                      value="sunday" {{ "checked" if schedules.day[6] == "true" else "" }}> 일</label>
+        <span class="weekend">
+                           <label><input type="checkbox" name="day" value="everyweek" {{ "checked" if schedules.day[7] == "true" else "" }}> 매주</label></span>
+    </form>
+
+    {# shedule에 저장된 time값을 : 기준으로 시간과 분으로 나눠서 값 가져온뒤 그 값에 select해서 보여주기#}
+    <div class="timecss">
+        <select class="timecss2" id="schedule-time1">
+            <option value="00" {{
+            "selected" if schedules.time.split(':')[0] == '00' else "" }}>00
+            </option>
+            <option value="01" {{
+            "selected" if schedules.time.split(':')[0] == '01' else "" }}>01
+            </option>
+            <option value="02" {{
+            "selected" if schedules.time.split(':')[0] == '02' else "" }}>02
+            </option>
+            <option value="03" {{
+            "selected" if schedules.time.split(':')[0] == '03' else "" }}>03
+            </option>
+            <option value="04" {{
+            "selected" if schedules.time.split(':')[0] == '04' else "" }}>04
+            </option>
+            <option value="05" {{
+            "selected" if schedules.time.split(':')[0] == '05' else "" }}>05
+            </option>
+            <option value="06" {{
+            "selected" if schedules.time.split(':')[0] == '06' else "" }}>06
+            </option>
+            <option value="07" {{
+            "selected" if schedules.time.split(':')[0] == '07' else "" }}>07
+            </option>
+            <option value="08" {{
+            "selected" if schedules.time.split(':')[0] == '08' else "" }}>08
+            </option>
+            <option value="09" {{
+            "selected" if schedules.time.split(':')[0] == '09' else "" }}>09
+            </option>
+            <option value="10" {{
+            "selected" if schedules.time.split(':')[0] == '10' else "" }}>10
+            </option>
+            <option value="11" {{
+            "selected" if schedules.time.split(':')[0] == '11' else "" }}>11
+            </option>
+            <option value="12" {{
+            "selected" if schedules.time.split(':')[0] == '12' else "" }}>12
+            </option>
+            <option value="13" {{
+            "selected" if schedules.time.split(':')[0] == '13' else "" }}>13
+            </option>
+            <option value="14" {{
+            "selected" if schedules.time.split(':')[0] == '14' else "" }}>14
+            </option>
+            <option value="15" {{
+            "selected" if schedules.time.split(':')[0] == '15' else "" }}>15
+            </option>
+            <option value="16" {{
+            "selected" if schedules.time.split(':')[0] == '16' else "" }}>16
+            </option>
+            <option value="17" {{
+            "selected" if schedules.time.split(':')[0] == '17' else "" }}>17
+            </option>
+            <option value="18" {{
+            "selected" if schedules.time.split(':')[0] == '18' else "" }}>18
+            </option>
+            <option value="19" {{
+            "selected" if schedules.time.split(':')[0] == '19' else "" }}>19
+            </option>
+            <option value="20" {{
+            "selected" if schedules.time.split(':')[0] == '20' else "" }}>20
+            </option>
+            <option value="21" {{
+            "selected" if schedules.time.split(':')[0] == '21' else "" }}>21
+            </option>
+            <option value="22" {{
+            "selected" if schedules.time.split(':')[0] == '22' else "" }}>22
+            </option>
+            <option value="23" {{
+            "selected" if schedules.time.split(':')[0] == '23' else "" }}>23
+            </option>
+        </select>
+
+        <select class="timecss2" id="schedule-time2">
+            <option value="00" {{
+            "selected" if schedules.time.split(':')[1] == '00' else "" }}>00
+            </option>
+            <option value="01" {{
+            "selected" if schedules.time.split(':')[1] == '01' else "" }}>01
+            </option>
+            <option value="02" {{
+            "selected" if schedules.time.split(':')[1] == '02' else "" }}>02
+            </option>
+            <option value="03" {{
+            "selected" if schedules.time.split(':')[1] == '03' else "" }}>03
+            </option>
+            <option value="04" {{
+            "selected" if schedules.time.split(':')[1] == '04' else "" }}>04
+            </option>
+            <option value="05" {{
+            "selected" if schedules.time.split(':')[1] == '05' else "" }}>05
+            </option>
+            <option value="06" {{
+            "selected" if schedules.time.split(':')[1] == '06' else "" }}>06
+            </option>
+            <option value="07" {{
+            "selected" if schedules.time.split(':')[1] == '07' else "" }}>07
+            </option>
+            <option value="08" {{
+            "selected" if schedules.time.split(':')[1] == '08' else "" }}>08
+            </option>
+            <option value="09" {{
+            "selected" if schedules.time.split(':')[1] == '09' else "" }}>09
+            </option>
+            <option value="10" {{
+            "selected" if schedules.time.split(':')[1] == '10' else "" }}>10
+            </option>
+            <option value="11" {{
+            "selected" if schedules.time.split(':')[1] == '11' else "" }}>11
+            </option>
+            <option value="12" {{
+            "selected" if schedules.time.split(':')[1] == '12' else "" }}>12
+            </option>
+            <option value="13" {{
+            "selected" if schedules.time.split(':')[1] == '13' else "" }} >13
+            </option>
+            <option value="14" {{
+            "selected" if schedules.time.split(':')[1] == '14' else "" }}>14
+            </option>
+            <option value="15" {{
+            "selected" if schedules.time.split(':')[1] == '15' else "" }}>15
+            </option>
+            <option value="16" {{
+            "selected" if schedules.time.split(':')[1] == '16' else "" }}>16
+            </option>
+            <option value="17" {{
+            "selected" if schedules.time.split(':')[1] == '17' else "" }}>17
+            </option>
+            <option value="18" {{
+            "selected" if schedules.time.split(':')[1] == '18' else "" }}>18
+            </option>
+            <option value="19" {{
+            "selected" if schedules.time.split(':')[1] == '19' else "" }}>19
+            </option>
+            <option value="20" {{
+            "selected" if schedules.time.split(':')[1] == '20' else "" }}>20
+            </option>
+            <option value="21" {{
+            "selected" if schedules.time.split(':')[1] == '21' else "" }}>21
+            </option>
+            <option value="22" {{
+            "selected" if schedules.time.split(':')[1] == '22' else "" }}>22
+            </option>
+            <option value="23" {{
+            "selected" if schedules.time.split(':')[1] == '23' else "" }}>23
+            </option>
+            <option value="24" {{
+            "selected" if schedules.time.split(':')[1] == '24' else "" }}>24
+            </option>
+            <option value="25" {{
+            "selected" if schedules.time.split(':')[1] == '25' else "" }}>25
+            </option>
+            <option value="26" {{
+            "selected" if schedules.time.split(':')[1] == '26' else "" }}>26
+            </option>
+            <option value="27" {{
+            "selected" if schedules.time.split(':')[1] == '27' else "" }}>27
+            </option>
+            <option value="28" {{
+            "selected" if schedules.time.split(':')[1] == '28' else "" }}>28
+            </option>
+            <option value="29" {{
+            "selected" if schedules.time.split(':')[1] == '29' else "" }}>29
+            </option>
+            <option value="30" {{
+            "selected" if schedules.time.split(':')[1] == '30' else "" }}>30
+            </option>
+            <option value="31" {{
+            "selected" if schedules.time.split(':')[1] == '31' else "" }}>31
+            </option>
+            <option value="32" {{
+            "selected" if schedules.time.split(':')[1] == '32' else "" }}>32
+            </option>
+            <option value="33" {{
+            "selected" if schedules.time.split(':')[1] == '33' else "" }}>33
+            </option>
+            <option value="34" {{
+            "selected" if schedules.time.split(':')[1] == '34' else "" }}>34
+            </option>
+            <option value="35" {{
+            "selected" if schedules.time.split(':')[1] == '35' else "" }}>35
+            </option>
+            <option value="36" {{
+            "selected" if schedules.time.split(':')[1] == '36' else "" }}>36
+            </option>
+            <option value="37" {{
+            "selected" if schedules.time.split(':')[1] == '37' else "" }}>37</option>
+            <option value="38" {{
+            "selected" if schedules.time.split(':')[1] == '38' else "" }}>38</option>
+            <option value="39" {{
+            "selected" if schedules.time.split(':')[1] == '39' else "" }}>39</option>
+            <option value="40" {{
+            "selected" if schedules.time.split(':')[1] == '40' else "" }}>40</option>
+            <option value="41" {{
+            "selected" if schedules.time.split(':')[1] == '41' else "" }}>41</option>
+            <option value="42" {{
+            "selected" if schedules.time.split(':')[1] == '42' else "" }}>42</option>
+            <option value="43" {{
+            "selected" if schedules.time.split(':')[1] == '43' else "" }}>43</option>
+            <option value="44" {{
+            "selected" if schedules.time.split(':')[1] == '44' else "" }}>44</option>
+            <option value="45" {{
+            "selected" if schedules.time.split(':')[1] == '45' else "" }}>45</option>
+            <option value="46" {{
+            "selected" if schedules.time.split(':')[1] == '46' else "" }}>46</option>
+            <option value="47" {{
+            "selected" if schedules.time.split(':')[1] == '47' else "" }}>47</option>
+            <option value="48" {{
+            "selected" if schedules.time.split(':')[1] == '48' else "" }}>48</option>
+            <option value="49" {{
+            "selected" if schedules.time.split(':')[1] == '49' else "" }}>49</option>
+            <option value="50" {{
+            "selected" if schedules.time.split(':')[1] == '50' else "" }}>50</option>
+            <option value="51" {{
+            "selected" if schedules.time.split(':')[1] == '51' else "" }}>51</option>
+            <option value="52" {{
+            "selected" if schedules.time.split(':')[1] == '52' else "" }}>52</option>
+            <option value="53" {{
+            "selected" if schedules.time.split(':')[1] == '53' else "" }}>53</option>
+            <option value="54" {{
+            "selected" if schedules.time.split(':')[1] == '54' else "" }}>54</option>
+            <option value="55" {{
+            "selected" if schedules.time.split(':')[1] == '55' else "" }}>55</option>
+            <option value="56" {{
+            "selected" if schedules.time.split(':')[1] == '56' else "" }}>56</option>
+            <option value="57" {{
+            "selected" if schedules.time.split(':')[1] == '57' else "" }}>57</option>
+            <option value="58" {{
+            "selected" if schedules.time.split(':')[1] == '58' else "" }}>58</option>
+            <option value="59" {{
+            "selected" if schedules.time.split(':')[1] == '59' else "" }}>59</option>
+        </select>
+    </div>
+</div>
+
+<div class="content">
+    <div class="box">
+        <p><label class="label"><b>제목</b></label></p>
+        <input id="schedule-title" class="titlecss" type="text" value="{{ schedules.subject }}">
+        <p><label class="label"><b>내용</b></label></p>
+        <textarea id="schedule-content" class="contentecss" placeholder="내용을 입력하세요"
+                  rows="10">{{ schedules.content }}</textarea>
+    </div>
+
+
+</div>
+<div class="btn">
+    <button class="button1" onclick="location.href='/' ">뒤로가기</button>
+    <button class="button2" onclick="edit()">수정하기</button>
+</div>
+{% else %}
 <div class="center">
     <form class="checkboxcss" method="get" action="">
         <label><input type="checkbox" name="day" value="monday"> 월</label>
@@ -316,7 +650,6 @@
     </div>
 </div>
 
-
 <div class="content">
     <div class="box">
         <p><label class="label"><b>제목</b></label></p>
@@ -328,10 +661,10 @@
                   rows="10"></textarea>
     </div>
 </div>
-
 <div class="btn">
     <button class="button1" onclick="location.href='/' ">뒤로가기</button>
     <button class="button2" onclick="schedule()">등록하기</button>
 </div>
+{% endif %}
 </body>
 </html>

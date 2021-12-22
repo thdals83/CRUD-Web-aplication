@@ -43,20 +43,27 @@ def home():
 def login():
     return render_template('login.html')
 
+
 # 회원가입 경로
 @app.route('/register')
 def register():
     return render_template("register.html")
 
+
 # 스케줄 작성 경로
 @app.route('/write')
 def write():
     token_receive = request.cookies.get('mytoken')
+    u_id = request.args.get('u_id')
 
     if token_receive is not None:
+        if u_id is not None:
+            schedules = db.schedule.find_one({'_id': ObjectId(u_id)})
+            return render_template('write.html', schedules=schedules)
         return render_template('write.html')
     else:
         return render_template('write.html', isLogin=False, msg='로그인 후 이용하세요.')
+
 
 # 회원가입창에서 회원가입 버튼 누르면 값 받아오기
 @app.route('/register/move', methods=['POST'])
@@ -69,12 +76,14 @@ def moverlogin():
     db.user.insert_one(doc)
     return render_template('login.html')
 
+
 # 회원가입 창에서이메일을 db에서 찾아서 클라이언트로 전달
 @app.route('/sign_up/check_dup', methods=['POST'])
 def check_dup():
     id_receive = request.form['id_give']
     exists = bool(db.user.find_one({"id": id_receive}))
     return jsonify({'result': 'success', 'exists': exists})
+
 
 # 로그인 창에서 로그인 버튼 누르면 값 받아오기
 @app.route('/api/login', methods=['POST'])
@@ -100,6 +109,7 @@ def api_login():
         # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+
 
 # 리스트 작성 창에서 리스트 양식 값들 받아오기
 @app.route('/api/write', methods=['POST', 'GET'])
@@ -160,6 +170,7 @@ def api_sort():
                 sortedArr.insert(0, filter_data[i - 1])
         return jsonify({'result': dumps(sortedArr)})
 
+
 # [리스트 삭제 API]
 @app.route('/api/remove', methods=['POST'])
 def api_remove():
@@ -178,6 +189,33 @@ def api_remove():
     # 삭제 할 스케줄 정보가 없을 경우
     else:
         return jsonify({'result': 'fail', 'msg': '선택된 스케줄이 없습니다.'})
+
+
+# 수정페이지
+@app.route('/api/edit', methods=['POST'])
+def api_edit():
+    token_receive = request.cookies.get('mytoken')  # 토큰 받아서 디코드
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+
+    id_receive = payload['id']
+    _id = request.form['_id']
+    title_receive = request.form['title_give']
+    content_receive = request.form['content_give']
+    time1_receive = request.form['time1_give']  # time1 -> hour
+    time2_receive = request.form['time2_give']  # time2 -> minute
+    day_receive = request.form.getlist('day_give[]')
+    doc = {
+        "id": id_receive,
+        "subject": title_receive,
+        "time": time1_receive + ':' + time2_receive,  # 시간
+        "day": day_receive,
+        "content": content_receive
+    }
+
+    # 수정된 내용들을 db shedule에 업로드 해주기
+    db.schedule.update_one({'_id': ObjectId(_id)}, {'$set': doc})
+
+    return jsonify({'result': 'success', 'msg': '수정되었습니다.'})
 
 
 if __name__ == '__main__':

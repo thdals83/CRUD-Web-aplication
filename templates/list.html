@@ -45,6 +45,14 @@
             border-color: aqua;
             border-radius: 5px;
         }
+
+        .editbtn {
+            width: 50px;
+            height: 50px;
+            background-image: url("data:image/png;base64,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");
+            background-position: center;
+            background-size: 50px;
+        }
     </style>
 
     <script>
@@ -87,11 +95,18 @@
                         <p>${data[i]["time"]}</p>
                         <p>${data[i]["content"]}</p>
                         </div>
+                        <div>
+                        <button class="editbtn" onclick="editbtn(this)" value= ${data[i]["_id"]["$oid"]} name="edit" type="button"></button>
+                        </div>
                         `
                         $("#listbox").append(temp_html);
                     }
                 }
             })
+        }
+
+        function editbtn(tmp){
+            window.location.href = "/write?u_id=" + tmp.value;
         }
 
         function delbtn() {
@@ -173,6 +188,8 @@
     <div id="listbox"></div>
     <button data-mode="on" type="button" class="removebtn" style="display: none" onclick="delbtn()" id="removebtn">삭제
     </button>
+
+
 </div>
 </body>
 </html>
