@@ -38,19 +38,18 @@
             background-position: center;
             background-size: 800px;
         }
+
+        .listcss {
+            margin-bottom: 10px;
+            border: 1px solid;
+            border-color: aqua;
+            border-radius: 5px;
+        }
     </style>
 
     <script>
         function pluslist() {
             window.location.href = "/write"
-        }
-
-        function getAllLists(listArr) {
-            // 각 스케줄의 데이터를 순회
-            return listArr.reduce((html, item, idx) => {
-                // 각 스케줄의 템플릿 생성
-                return html += getListHtmls(item, idx)
-            }, '')
         }
 
         function sortbtn() {
@@ -72,32 +71,75 @@
 
 
                     for (let i in data) {
+                        let _id = data[i]["_id"]["$oid"]
                         let daystring = ''
-                        for (let j in data[i]["day"]){
-                            if (data[i]["day"][j] === "true"){
+                        for (let j in data[i]["day"]) {
+                            if (data[i]["day"][j] === "true") {
                                 daystring += days[j]
                             }
 
                         }
                         let temp_html = `
-                        <div class="round-cb">
-                            <input type="checkbox" >
-                            <label ></label>
-                        </div>
-                        <p>${daystring}</p>
+                        <div class="listcss">
+                            <input type="checkbox" name="delcheck" value= ${data[i]["_id"]["$oid"]} >
+                         <p>${daystring}</p>
                         <p>${data[i]["subject"]}</p>
                         <p>${data[i]["time"]}</p>
                         <p>${data[i]["content"]}</p>
-
+                        </div>
                         `
-                        // 데이터를 리스트 템플릿으로 변환
-                        // const allListHtmls = getAllLists(data)
-                        console.log(data[i]["day"])
-                        $("#listbox").append(temp_html)
+                        $("#listbox").append(temp_html);
                     }
                 }
             })
         }
+
+        function delbtn() {
+            var obj_length = document.getElementsByName("delcheck").length;
+            var arr = [];
+            for (var i = 0; i < obj_length; i++) {
+                if (document.getElementsByName("delcheck")[i].checked == true) {
+                    arr.push(document.getElementsByName("delcheck")[i].value)
+                }
+            }
+            $.ajax({
+                type: "POST",
+                url: "/api/remove",
+                data: {
+                    remove_list_give: arr,
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert('삭제되었습니다.')
+                        window.location.href = '/'
+                    } else {
+                        alert(response['msg'])
+                    }
+                }
+            })
+        }
+
+        function allbtn() {
+            var obj_length = document.getElementsByName("delcheck").length;
+            var arr = [];
+            for (var i = 0; i < obj_length; i++) {
+                document.getElementsByName("delcheck")[i].checked = true
+            }
+        }
+
+        function changeremove() {
+            $("#afterGroup").css("display", "inline")
+            $("#removebtn").css("display", "inline")
+            $("#beforeGroup").css("display", "none")
+            // $("#removebtn").css("display","none")
+        }
+
+        function backbtn() {
+            $("#afterGroup").css("display", "none")
+            $("#removebtn").css("display", "none")
+            $("#beforeGroup").css("display", "inline")
+        }
+
     </script>
 
 </head>
@@ -109,11 +151,11 @@
     <div class="btns-group">
         <div class="group before-group" id="beforeGroup">
             <button type="button" onclick="pluslist()" class="login_button">추가</button>
-            <button data-mode="on" class="button is-danger" id="removeModeBtn">삭제</button>
+            <button data-mode="on" onclick="changeremove()" class="changeremove" id="removeModeBtn">삭제</button>
         </div>
-        <div class="group after-group" id="afterGroup">
-            <button class="button" id="allSelBtn">전체선택</button>
-            <button class="button" id="backBtn">뒤로가기</button>
+        <div class="group after-group" id="afterGroup" style="display: none">
+            <button class="allclick" onclick="allbtn()" id="allSelBtn">전체선택</button>
+            <button class="button" onclick="backbtn()" id="backBtn">뒤로가기</button>
         </div>
     </div>
 
@@ -127,43 +169,10 @@
         <button class="sortbtn" onclick="sortbtn()" data-mode="" id="todayFilterBtn">오늘할일 보기</button>
     </div>
 
-<!--    {% for c in schd_data %}-->
-<!--    <div class="round-cb">-->
-<!--        <input type="checkbox" id="listItem{{ loop.index }}" value="{{ c._id }}" class="uid">-->
-<!--        <label for="listItem{{ loop.index }}" class="fas fa-check-circle"></label>-->
-<!--    </div>-->
-<!--    <div class="days">-->
-<!--        {% for day in c.day %}-->
-<!--        {% if loop.index == 1 and day == 'true' %}-->
-<!--        <span class="icon-day has-background-light">월</span>-->
-<!--        {% elif loop.index == 2 and day == 'true' %}-->
-<!--        <span class="icon-day has-background-light">화</span>-->
-<!--        {% elif loop.index == 3 and day == 'true' %}-->
-<!--        <span class="icon-day has-background-light">수</span>-->
-<!--        {% elif loop.index == 4 and day == 'true' %}-->
-<!--        <span class="icon-day has-background-light">목</span>-->
-<!--        {% elif loop.index == 5 and day == 'true' %}-->
-<!--        <span class="icon-day has-background-light">금</span>-->
-<!--        {% elif loop.index == 6 and day == 'true' %}-->
-<!--        <span class="icon-day has-background-light">토</span>-->
-<!--        {% elif loop.index == 7 and day == 'true' %}-->
-<!--        <span class="icon-day has-background-light">일</span>-->
-<!--        {% elif loop.index == 8 and day == 'true' %}-->
-<!--        <span class="icon-day every-week has-background-danger">매주</span>-->
-<!--        {% endif %}-->
-<!--        {% endfor %}-->
-<!--    </div>-->
-<!--    <p></p>-->
-<!--    <b>{{c["subject"]}}</b>-->
-<!--    <p></p>-->
-<!--    {{c["time"]}}-->
-<!--    <p></p>-->
-<!--    {{c["content"]}}-->
-<!--    <p></p>-->
-<!--    {% endfor%}-->
-<!--</div>-->
-<div id="listbox">
 
+    <div id="listbox"></div>
+    <button data-mode="on" type="button" class="removebtn" style="display: none" onclick="delbtn()" id="removebtn">삭제
+    </button>
 </div>
 </body>
 </html>

@@ -160,6 +160,25 @@ def api_sort():
                 sortedArr.insert(0, filter_data[i - 1])
         return jsonify({'result': dumps(sortedArr)})
 
+# [리스트 삭제 API]
+@app.route('/api/remove', methods=['POST'])
+def api_remove():
+    # 삭제 할 스케줄 리스트 저장
+    # 타입: Array
+    # 요소 값: 각 스케줄의 _id
+    remove_list_receive = request.form.getlist('remove_list_give[]')
+
+    # 삭제 할 스케줄 정보가 존재 할 경우
+    if len(remove_list_receive):
+        for item_id in remove_list_receive:
+            # 리스트를 순회하며 스케줄 데이터를 삭제
+            # [MEMO] MongoDB를 _id를 참조하여 다루게 될 경우 ObjectId 를 사용해야함
+            db.schedule.delete_one({'_id': ObjectId(item_id)})
+        return jsonify({'result': 'success'})
+    # 삭제 할 스케줄 정보가 없을 경우
+    else:
+        return jsonify({'result': 'fail', 'msg': '선택된 스케줄이 없습니다.'})
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
