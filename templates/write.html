@@ -170,8 +170,9 @@
                 alert("요일을 체크해주세요.")
                 return;
             }
+
             let params = new URLSearchParams(document.location.search.substring(1))
-            //params의 u_id값 가져오기
+
             let u_id = params.get("u_id")
 
             //저장시킬 항목들 value 저장
